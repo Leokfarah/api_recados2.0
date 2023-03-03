@@ -8,7 +8,7 @@ export const checkUserInputs = (req: Request, res: Response, next: NextFunction)
         return res.status(402).send({
             sucesso: false,
             mensagem: 'Dados não enviados',
-            dados: { email, senha },
+            dados: null,
         } as IResposta);
     };
 

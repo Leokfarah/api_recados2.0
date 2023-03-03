@@ -116,8 +116,6 @@ export class RecadosController {
         const repositorio = new RecadosRepository();
         const recados = await repositorio.recadosArquivadosPorNome(idUsuario, tituloBusca);
 
-        console.log('resposta: ', recados);
-
         if (!recados) {
             return res.status(404).send({
                 sucesso: false,
@@ -133,5 +131,62 @@ export class RecadosController {
         } as IResposta);
     }
 
+    async update(req: Request, res: Response) {
+        const { idUsuario, idRecado, titulo, descricao, data, arquivado, deletado } = req.body;
+
+        const repositorio = new RecadosRepository();
+        const resposta = await repositorio.updateRecado(idUsuario, idRecado, titulo, descricao, data, deletado, arquivado);
+
+        if (resposta === false) {
+            return res.status(404).send({
+                sucesso: false,
+                mensagem: 'Usuário não encontrado',
+                dados: null,
+            } as IResposta);
+        }
+
+        if (resposta === null) {
+            return res.status(404).send({
+                sucesso: false,
+                mensagem: 'Recado não existente',
+                dados: null,
+            } as IResposta);
+        }
+
+        return res.status(201).send({
+            sucesso: true,
+            mensagem: 'Recado editado com sucesso!',
+            dados: resposta,
+        } as IResposta);
+    }
+
+    async desarquiva(req: Request, res: Response) {
+        const { idUsuario, idRecado, titulo, descricao, data, arquivado, deletado } = req.body;
+
+        const repositorio = new RecadosRepository();
+        const resposta = await repositorio.desarquivaRecado(idUsuario, idRecado, titulo, descricao, data, deletado, arquivado);
+
+        if (resposta === false) {
+            return res.status(404).send({
+                sucesso: false,
+                mensagem: 'Usuário não encontrado',
+                dados: null,
+            } as IResposta);
+        }
+
+        if (resposta === null) {
+            return res.status(404).send({
+                sucesso: false,
+                mensagem: 'Recado não existente',
+                dados: null,
+            } as IResposta);
+        }
+
+        return res.status(201).send({
+            sucesso: true,
+            mensagem: 'Recado editado com sucesso!',
+            dados: resposta,
+        } as IResposta);
+    }
 
 }

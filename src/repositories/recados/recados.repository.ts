@@ -31,7 +31,7 @@ export class RecadosRepository {
             },
         });
 
-        if (!recados || recados.length === 0) {
+        if (!recados) {
             return null;
         }
 
@@ -53,7 +53,7 @@ export class RecadosRepository {
             },
         });
 
-        if (!recados || recados.length === 0) {
+        if (!recados) {
             return null;
         }
 
@@ -76,7 +76,7 @@ export class RecadosRepository {
             },
         });
 
-        if (!recados || recados.length === 0) {
+        if (!recados) {
             return null;
         }
 
@@ -106,6 +106,57 @@ export class RecadosRepository {
         return recados;
     }
 
+    async updateRecado(idUsuario: string, idRecado: string, titulo: string, descricao: string, data: string, deletado: boolean, arquivado: boolean): Promise<RecadosEntity[] | null | false> {
+        const checkExistUser = await RecadosEntity.findOne({ where: { idUsuario } });
 
+        if (!checkExistUser) {
+            return false;
+        }
 
+        const linhaParaEditar = await RecadosEntity.findOne({ where: { idRecado } });
+
+        if (linhaParaEditar) {
+            linhaParaEditar.titulo = titulo;
+            linhaParaEditar.descricao = descricao;
+            linhaParaEditar.data = data;
+            linhaParaEditar.deletado = deletado;
+            linhaParaEditar.arquivado = arquivado;
+            linhaParaEditar.dataAlteracao = new Date();
+
+            await RecadosEntity.update(linhaParaEditar.idRecado, linhaParaEditar);
+
+            const recados = await this.recadosAtivos(idUsuario);
+
+            return recados;
+        }
+
+        return null;
+    }
+
+    async desarquivaRecado(idUsuario: string, idRecado: string, titulo: string, descricao: string, data: string, deletado: boolean, arquivado: boolean): Promise<RecadosEntity[] | null | false> {
+        const checkExistUser = await RecadosEntity.findOne({ where: { idUsuario } });
+
+        if (!checkExistUser) {
+            return false;
+        }
+
+        const linhaParaEditar = await RecadosEntity.findOne({ where: { idRecado } });
+
+        if (linhaParaEditar) {
+            linhaParaEditar.titulo = titulo;
+            linhaParaEditar.descricao = descricao;
+            linhaParaEditar.data = data;
+            linhaParaEditar.deletado = deletado;
+            linhaParaEditar.arquivado = arquivado;
+            linhaParaEditar.dataAlteracao = new Date();
+
+            await RecadosEntity.update(linhaParaEditar.idRecado, linhaParaEditar);
+
+            const recados = await this.recadosArquivados(idUsuario);
+
+            return recados;
+        }
+
+        return null;
+    }
 }

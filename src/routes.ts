@@ -1,7 +1,6 @@
 import { Express } from 'express';
 import { RecadosController } from './controllers/recados/recados.controller';
 import { UsuariosController } from './controllers/usuarios/usuarios.controller';
-import { checkRecadosInputs } from './middlewares/checkRecadosInputs/checkRecadosInputs ';
 import { checkUserInputs } from './middlewares/checkUserInputs/checkUserInputs';
 
 export default (app: Express) => {
@@ -23,7 +22,7 @@ export default (app: Express) => {
     const recadosController = new RecadosController();
 
     //criar novo recado:
-    app.post('/novoRecado', [checkRecadosInputs], recadosController.create);
+    app.post('/novoRecado', recadosController.create);
 
     //get todos os recados ativos do usuário:
     app.get('/recados/ativos/:idUsuario', recadosController.getRecadosAtivos);
@@ -38,9 +37,9 @@ export default (app: Express) => {
     app.get('/recados/arquivados/:idUsuario/buscar', recadosController.getRecadosArquivadosPorNome);
 
     // editar recados, arquivar (variavel arquivado = false para true) e soft delete (variavel deletado)
-    app.put('/editar', [checkRecadosInputs],);
+    app.put('/editar', recadosController.update);
 
     //editar recado para desarquivar (troca da variavel arquivada = true para false)
-    app.put('/editar/desarquivar', [checkRecadosInputs],);
+    app.put('/editar/desarquivar', recadosController.desarquiva);
 
 }

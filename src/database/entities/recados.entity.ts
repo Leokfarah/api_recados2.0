@@ -41,10 +41,4 @@ export class RecadosEntity extends BaseEntity {
         this.deletado = false;
         this.idRecado = uuid();
     }
-
-    // @BeforeUpdate()
-    // beforeUpdate() {
-    //     this.dataAlteracao = new Date();
-    // }
-
 }
