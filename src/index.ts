@@ -7,7 +7,7 @@ const api = express();
 const port = process.env.PORT || 8080;
 
 api.use(express.json(), cors());
-appRoutes(api)
+appRoutes(api);
 
 pgHelper.connect().then(() => {
     api.listen(port, () => console.log(`Odete de patinete na porta: ${port}`));
